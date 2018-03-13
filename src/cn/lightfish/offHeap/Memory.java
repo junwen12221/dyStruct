@@ -1,6 +1,8 @@
 package cn.lightfish.offHeap;
 
 
+import java.util.Map;
+
 public class Memory {
     public static StructInfo build(String name, Object... map) {
         StructInfo meta = new StructInfo(name);
@@ -18,6 +20,9 @@ public class Memory {
                 meta.put(key, (Type) value);
             }
         }
+        Map.Entry[] entries = meta.map.entrySet()
+                .stream().map((e) -> Map.entry(e.getKey(), e.getValue())).toArray(Map.Entry[]::new);
+        meta.map = Map.ofEntries(entries);
         return meta;
     }
 }

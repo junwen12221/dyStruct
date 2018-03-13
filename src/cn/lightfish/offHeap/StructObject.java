@@ -11,55 +11,60 @@ public class StructObject {
     MemoryInterface memory;
 
     public <T> T $(String name) {
-        Member member = StructInfo.map.get(name);
-        long offset = member.offset;
-        long finalOffset = offset + address;
-        Object result = null;
-        String op = "";
-        switch (member.type) {
-            case Int:
-                result = memory.getInt(finalOffset);
-                op = "memory.getInt(address+%d);";
-                break;
-            case Long:
-                result = memory.getLong(finalOffset);
-                op = "memory.getLong(address+%d);";
-                break;
-            case Short:
-                result = memory.getShort(finalOffset);
-                op = "memory.getShort(address+%d);";
-                break;
-            case Byte:
-                result = memory.getByte(finalOffset);
-                op = "memory.getByte(address+%d);";
-                break;
-            case Float:
-                result = memory.getFloat(finalOffset);
-                op = "memory.getFloat(address+%d);";
-                break;
-            case Double:
-                result = memory.getDouble(finalOffset);
-                op = "memory.getDouble(address+%d);";
-                break;
-            case Char:
-                result = memory.getChar(finalOffset);
-                op = "memory.getChar(address+%d);";
-                break;
-            case Booelean:
-                result = memory.getBoolean(finalOffset);
-                op = "memory.getBoolean(address+%d);";
-                break;
-            case Struct:
-                result = finalOffset;
-                break;
-            case Address:
-                result = memory.getAddress(finalOffset);
-                op = "memory.getAddress(address+%d);";
-                break;
+        try {
+            Member member = StructInfo.map.get(name);
+            long offset = member.offset;
+            long finalOffset = offset + address;
+            Object result = null;
+            String op = "";
+            switch (member.type) {
+                case Int:
+                    result = memory.getInt(finalOffset);
+                    op = "memory.getInt(address+%d);";
+                    break;
+                case Long:
+                    result = memory.getLong(finalOffset);
+                    op = "memory.getLong(address+%d);";
+                    break;
+                case Short:
+                    result = memory.getShort(finalOffset);
+                    op = "memory.getShort(address+%d);";
+                    break;
+                case Byte:
+                    result = memory.getByte(finalOffset);
+                    op = "memory.getByte(address+%d);";
+                    break;
+                case Float:
+                    result = memory.getFloat(finalOffset);
+                    op = "memory.getFloat(address+%d);";
+                    break;
+                case Double:
+                    result = memory.getDouble(finalOffset);
+                    op = "memory.getDouble(address+%d);";
+                    break;
+                case Char:
+                    result = memory.getChar(finalOffset);
+                    op = "memory.getChar(address+%d);";
+                    break;
+                case Booelean:
+                    result = memory.getBoolean(finalOffset);
+                    op = "memory.getBoolean(address+%d);";
+                    break;
+                case Struct:
+                    result = finalOffset;
+                    break;
+                case Address:
+                    result = memory.getAddress(finalOffset);
+                    op = "memory.getAddress(address+%d);";
+                    break;
+            }
+            //System.out.printf(address + ".%s is %s%n", name, Objects.toString(result));
+            info(op, offset);
+            return (T) result;
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        System.out.printf(address + ".%s is %s%n", name, Objects.toString(result));
-        info(op, offset);
-        return (T) result;
+  return null;
     }
 
     public <R> void $(String name, R value) {
@@ -105,10 +110,10 @@ public class StructObject {
     }
 
     private void info(String templeate, Object... args) {
-        System.out.printf(templeate + "%n", args);
-        List<StackWalker.StackFrame> list = new ArrayList<>();
-        StackWalker.getInstance().forEach(list::add);
-        System.out.println(list.get(2));
+//        System.out.printf(templeate + "%n", args);
+//        List<StackWalker.StackFrame> list = new ArrayList<>();
+//        StackWalker.getInstance().forEach(list::add);
+//        System.out.println(list.get(2));
     }
 
     public void setStructInfo(StructInfo StructInfo) {
