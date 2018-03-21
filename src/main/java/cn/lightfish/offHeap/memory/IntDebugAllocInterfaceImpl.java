@@ -1,13 +1,18 @@
-package cn.lightfish.offHeap;
+package cn.lightfish.offHeap.memory;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeapInterfaceImpl implements HeapInterface {
-    ByteBuffer byteBuffer = ByteBuffer.allocate(8 * 1024);
-    List<Integer> list = new ArrayList<>();
+public class IntDebugAllocInterfaceImpl implements IntAllocInterface {
+    ByteBuffer byteBuffer;
+    List<Integer> list;
 
+    public IntDebugAllocInterfaceImpl(){
+        byteBuffer = ByteBuffer.allocate(8 * 1024);
+        byteBuffer.position(1);
+        list = new ArrayList<>();
+    }
     public int allocateMemory(int size) {
         int address = byteBuffer.position();
         list.add(address);

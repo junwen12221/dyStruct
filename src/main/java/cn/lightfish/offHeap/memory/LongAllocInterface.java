@@ -1,6 +1,6 @@
-package cn.lightfish.offHeap;
+package cn.lightfish.offHeap.memory;
 
-interface OffHeapInterface {
+interface LongAllocInterface {
     long allocateMemory(long size);
 
     long reallocateMemory(long address, long bytes);

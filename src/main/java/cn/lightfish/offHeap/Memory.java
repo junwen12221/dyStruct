@@ -1,6 +1,10 @@
 package cn.lightfish.offHeap;
 
 
+import cn.lightfish.offHeap.Member;
+import cn.lightfish.offHeap.StructInfo;
+import cn.lightfish.offHeap.Type;
+
 import java.util.Map;
 
 public class Memory {
@@ -11,18 +15,16 @@ public class Memory {
             String key = (String) map[i];
             if (value instanceof StructInfo) {
                 StructInfo innerStruct = (StructInfo) value;
-                meta.map.put(key, new Member(meta.size, Type.Struct, key));
+                meta.map.put(key, new Member(meta.size, Type.Struct, key,name));
                 innerStruct.map.forEach((key1, value1) -> {
                     String k = key + "." + key1;
-                    meta.map.put(k, new Member(meta.size += value1.type.getSize(), value1.type, k));
+                    meta.map.put(k, new Member(meta.size, value1.type, k,name));
+                    meta.size += value1.type.getSize();
                 });
             } else {
-                meta.put(key, (Type) value);
+                meta.put(key, value instanceof String?Type.valueOf((String) value):(Type) value);
             }
         }
-        Map.Entry[] entries = meta.map.entrySet()
-                .stream().map((e) -> Map.entry(e.getKey(), e.getValue())).toArray(Map.Entry[]::new);
-        meta.map = Map.ofEntries(entries);
         return meta;
     }
 }

@@ -1,23 +1,23 @@
-package cn.lightfish.offHeap;
+package cn.lightfish.offHeap.memory;
 
 public class MemoryInterface {
-    final HeapInterface heapInterface;
-    final OffHeapInterface offHeapInterface;
+    final IntAllocInterface heapInterface;
+    final LongAllocInterface offHeapInterface;
     final boolean isOffHeap;
 
-    public MemoryInterface(HeapInterface memoryInterface) {
+    public MemoryInterface(IntAllocInterface memoryInterface) {
         this.heapInterface = memoryInterface;
         isOffHeap = false;
         this.offHeapInterface = null;
     }
 
-    public MemoryInterface(OffHeapInterface offHeapInterface) {
+    public MemoryInterface(LongAllocInterface offHeapInterface) {
         this.offHeapInterface = offHeapInterface;
         isOffHeap = true;
         this.heapInterface = null;
     }
 
-    public MemoryInterface(HeapInterface heapInterface, OffHeapInterface offHeapInterface, boolean isOffHeap) {
+    public MemoryInterface(IntAllocInterface heapInterface, LongAllocInterface offHeapInterface, boolean isOffHeap) {
         this.heapInterface = heapInterface;
         this.offHeapInterface = offHeapInterface;
         this.isOffHeap = isOffHeap;

@@ -1,9 +1,22 @@
-package cn.lightfish.offHeap;
+package cn.lightfish.offHeap.memory;
 
 import sun.misc.Unsafe;
 
-public class OffHeapInterfaceImpl implements OffHeapInterface {
-    Unsafe unsafe = Unsafe.getUnsafe();
+import java.lang.reflect.Field;
+
+public class LongAllocInterfaceImpl implements LongAllocInterface {
+    Unsafe unsafe;
+
+    public LongAllocInterfaceImpl() {
+        try {
+            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+            f.setAccessible(true);
+            Unsafe unsafe = (Unsafe) f.get(null);
+            this.unsafe = unsafe;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public long allocateMemory(long size) {
         return unsafe.allocateMemory(size);
