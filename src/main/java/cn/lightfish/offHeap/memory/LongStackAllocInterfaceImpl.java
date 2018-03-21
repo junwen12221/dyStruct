@@ -4,22 +4,26 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
-public class LongAllocInterfaceImpl implements LongAllocInterface {
+public class LongStackAllocInterfaceImpl implements LongAllocInterface {
     Unsafe unsafe;
-
-    public LongAllocInterfaceImpl() {
+    long address;
+    long address0;
+    public LongStackAllocInterfaceImpl() {
         try {
             Field f = Unsafe.class.getDeclaredField("theUnsafe");
             f.setAccessible(true);
             Unsafe unsafe = (Unsafe) f.get(null);
             this.unsafe = unsafe;
+            address =address0=unsafe.allocateMemory(8192);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     public long allocateMemory(long size) {
-        return unsafe.allocateMemory(size);
+       long a= address;
+       address+=size;
+       return a;
     }
 
     public long reallocateMemory(long address, long bytes) {
@@ -27,7 +31,7 @@ public class LongAllocInterfaceImpl implements LongAllocInterface {
     }
 
     public void freeMemory(long address) {
-        unsafe.freeMemory(address);
+        this.address = address0;
     }
 
     public int getInt(long address) {
@@ -100,11 +104,11 @@ public class LongAllocInterfaceImpl implements LongAllocInterface {
     }
 
     public long getAddress(long address) {
-        return unsafe.getLong(address);
+        return unsafe.getAddress(address);
     }
 
     public void putAddress(long address, long value) {
-        unsafe.putLong(address, value);
+        unsafe.putAddress(address, value);
     }
 
     public void setMemory(long address, long bytes, byte value) {

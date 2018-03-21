@@ -1,6 +1,6 @@
 package cn.lightfish.offHeap.memory;
 
-interface IntAllocInterface {
+public interface IntAllocInterface {
     int allocateMemory(int size);
 
     int reallocateMemory(int address, int bytes);

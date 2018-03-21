@@ -29,7 +29,6 @@ public class RBTree {
             }
 
         }
-        destroy_rbtree(root);
     }
 
     static final StructInfo RBTreeNode = DyStruct.build("RBTreeNode",

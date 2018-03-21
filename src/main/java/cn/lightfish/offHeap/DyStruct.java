@@ -1,13 +1,14 @@
 package cn.lightfish.offHeap;
 
-import cn.lightfish.offHeap.memory.IntDebugAllocInterfaceImpl;
+import cn.lightfish.offHeap.memory.IntAllocInterfaceImpl;
+import cn.lightfish.offHeap.memory.LongStackAllocInterfaceImpl;
 import cn.lightfish.offHeap.memory.MemoryInterface;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DyStruct {
-    static MemoryInterface memory = new MemoryInterface(new IntDebugAllocInterfaceImpl());
+    final static LongStackAllocInterfaceImpl memory = new LongStackAllocInterfaceImpl();
     final static Map<Long, StructInfo> map = new HashMap<>();
     static boolean isDebug = true;
 
@@ -16,22 +17,20 @@ public class DyStruct {
     }
 
     public static long $malloc(StructInfo structInfo) {
-        long address = memory.allocateMemory(structInfo.size);
-        if (isDebug) {
-            map.put(address, structInfo);
-        }
+        long address = memory.allocateMemory(33);
         return address;
     }
 
+    public static long $malloc(long size) {
+        return memory.allocateMemory(size);
+    }
+
     public static void setMemoryInterface(MemoryInterface memoryInterface) {
-        memory = memoryInterface;
+        //memory = memoryInterface;
     }
 
 
     public static void $free(long address) {
-        if (isDebug) {
-            map.remove(address);
-        }
         memory.freeMemory(address);
     }
 
