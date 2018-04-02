@@ -14,6 +14,18 @@ public class RBTree {
     final static long NULL = 0L;
 
     /*dystruct offset false*/
+    public final static long NODE = 0L;
+
+    public final static long PARENT = 25L;
+
+    public final static long COLOR = 0L;
+
+    public final static long LEFT = 9L;
+
+    public final static long RIGHT = 17L;
+
+    public final static long KEY = 1L;
+
 
     public static void main(String[] args) throws Exception {
         DyStruct.setMemoryInterface(new MemoryInterface(new LongAllocInterfaceImpl()));

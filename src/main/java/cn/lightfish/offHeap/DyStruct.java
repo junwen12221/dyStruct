@@ -1,15 +1,23 @@
 package cn.lightfish.offHeap;
 
-import cn.lightfish.offHeap.memory.IntDebugAllocInterfaceImpl;
+import cn.lightfish.offHeap.memory.LongAllocInterfaceImpl;
 import cn.lightfish.offHeap.memory.MemoryInterface;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DyStruct {
-    static MemoryInterface memory = new MemoryInterface(new IntDebugAllocInterfaceImpl());
+    static MemoryInterface memory;
+
+    {
+        memory = new MemoryInterface(new LongAllocInterfaceImpl());
+    }
     final static Map<Long, StructInfo> map = new HashMap<>();
     static boolean isDebug = true;
+
+    public static Map<Long, StructInfo> getMap() {
+        return map;
+    }
 
     public static void setDebug(boolean debug) {
         isDebug = debug;
@@ -20,6 +28,11 @@ public class DyStruct {
         if (isDebug) {
             map.put(address, structInfo);
         }
+        return address;
+    }
+
+    public static long $malloc(long size) {
+        long address = memory.allocateMemory(size);
         return address;
     }
 
@@ -236,6 +249,30 @@ public class DyStruct {
         $(address, name, value);
     }
 
+    public static void setMemory(long address, long bytes, byte value) {
+        memory.setMemory(address, bytes, value);
+    }
+
+    public static long $offset(long address, String name) {
+        StructInfo structInfo = map.get(address);
+        Member member = structInfo.map.get(name);
+        long offset = member.offset;
+        long finalAddress = offset + address;
+        return finalAddress;
+    }
+
+    public static long $offset(long address, long offset) {
+        long finalAddress = offset + address;
+        return finalAddress;
+    }
+
+    //}
+//    public static long $ByteArray(long address,long index,byte value) {
+//        return $(address+index,value);
+//    }
+//    public static long $ByteArray(long address,long index value) {
+//        return $(address+index,byte);
+//    }
     public static <R> void $(Long address, String name, R value) {
         StructInfo structInfo = map.get(address);
         Member member = structInfo.map.get(name);
